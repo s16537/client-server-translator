@@ -82,20 +82,23 @@ public class LangServer extends Thread{
 
 					//establish connection with awaiting client and send the result
 					Socket replySocket;
-					replySocket = new Socket("localhost", destinationPort);
+					replySocket = new Socket(socket.getLocalAddress(), destinationPort);
 					sendMsgToClient(replySocket, responseMsg);
-					//replySocket.close();
 					
 				}else { // stop the loop
 					shouldBeRunning = false;
 				}
 			}
 			
-			in.close();
-			socket.close();
+			stopLangServer();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void stopLangServer() throws IOException {
+		in.close();
+		socket.close();
 	}
 }

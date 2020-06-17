@@ -25,8 +25,6 @@ public class Client extends JFrame{
 	private boolean running = true;
 	private Socket clientSocket;
 	private PrintWriter queryOut;
-	private ServerSocket responseSocket;
-	private BufferedReader responseReader;
 	
 	public Client(String serverHost, int destPort) {
 
@@ -34,9 +32,6 @@ public class Client extends JFrame{
 			clientSocket = new Socket(serverHost, destPort);
 			System.out.println("Nawi¹zano po³¹czenie z " + serverHost + ", port docelowy: " + destPort);
 			queryOut = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()), true);
-
-			//create client's ServerSocket listening for translation
-			responseSocket = new ServerSocket(generateListeningPort());
 			
 			String cmd ="_idle";
 			while(running){
@@ -46,7 +41,9 @@ public class Client extends JFrame{
 					running = false;
 					continue;
 				}
-				
+
+				//create client's ServerSocket listening for translation
+				ServerSocket responseSocket = new ServerSocket(generateListeningPort());
 				String msg = 
 						String.format("%s;%d", cmd, responseSocket.getLocalPort());
 				System.out.println(String.format("%s:%s", "Sending", msg));
@@ -54,17 +51,15 @@ public class Client extends JFrame{
 				queryOut.println(msg);
 				Socket sTrans = responseSocket.accept();
 				//receiving translation
-				responseReader = new BufferedReader(new InputStreamReader(sTrans.getInputStream()));
+				BufferedReader responseReader = new BufferedReader(new InputStreamReader(sTrans.getInputStream()));
 				String incoming = responseReader.readLine();
 				//display reply message
 				//System.out.println(incoming);
 				JOptionPane.showMessageDialog(this, "T³umaczenie: " + incoming);
 				//close
 				responseReader.close();
+				responseSocket.close();
 			}
-			
-
-			responseSocket.close();
 			
 			//exit the client
 			closeClient();
