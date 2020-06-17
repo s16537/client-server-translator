@@ -1,0 +1,5 @@
+pies:dog
+kot:cat
+dom:house
+koń:horse
+komputer:computer

@@ -1,0 +1,6 @@
+pies:hund
+kot:katze
+dom:haus
+koń:pferd
+komputer:computer
+koszula:hemd

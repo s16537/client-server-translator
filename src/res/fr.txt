@@ -1,0 +1,5 @@
+pies:chien
+kot:chat
+dom:maison
+koń:cheval
+komputer:ordinateur
